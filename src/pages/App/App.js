@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 
 import LoginPage from '../Login/LoginPage'
 import DashboardPage from '../Dashboard/DashboardPage'
+import portisLogin from '../Portis/portis'
 
 import {
   useUserState,
@@ -11,6 +12,7 @@ import {
   useUserDispatch
 } from '../../context/UserContext'
 import { LoginProvider } from '../Login/LoginContext'
+import { func } from 'prop-types';
 
 function App (props) {
   const { status: userStatus } = useUserState()
@@ -27,6 +29,7 @@ function App (props) {
       <Switch>
         <PrivateRoute exact path='/' component={DashboardRoute} />
         <PublicRoute exact path='/login' component={LoginRoute} />
+        <PublicRoute exact path='/test_portis' component={portisLogin} />
       </Switch>
     </HashRouter>
   )
@@ -44,6 +47,10 @@ function DashboardRoute () {
   return <DashboardPage />
 }
 
+function PortisRoute(){
+  return <portisLogin/>
+}
+
 function PrivateRoute ({ component, ...rest }) {
   const { isAuthenticated } = useUserState()
   return (
@@ -53,8 +60,9 @@ function PrivateRoute ({ component, ...rest }) {
         isAuthenticated ? (
           React.createElement(component, props)
         ) : (
+          //I changed, login to test_portis so i can test this. 
           <Redirect
-            to={{ pathname: '/login', state: { from: props.location } }}
+            to={{ pathname: '/test_portis', state: { from: props.location } }}
           />
         )
       }
